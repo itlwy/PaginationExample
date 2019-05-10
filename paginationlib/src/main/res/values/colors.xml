@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="indicator_rect_selected">#1895FF</color>
+    <color name="indicator_rect_unselected">#A7A7A7</color>
+</resources>
