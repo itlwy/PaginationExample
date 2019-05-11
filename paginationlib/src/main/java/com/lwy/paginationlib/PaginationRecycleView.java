@@ -96,6 +96,10 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         mPaginationControllerView.setTotalCount(total);
     }
 
+    public void setNumberTipShowCount(int numberTipShowCount) {
+        mPaginationControllerView.setNumberTipShowCount(numberTipShowCount);
+    }
+
     @Override
     public void onPageSelectedChanged(int currentPapePos, int lastPagePos, int totalPageCount, int total) {
         if (currentPapePos > lastPagePos) {

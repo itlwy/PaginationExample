@@ -45,6 +45,11 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
     public static float sTextSize = 16;
     private TextView mTotalTv;
 
+    public void setNumberTipShowCount(int numberTipShowCount) {
+        mNumberTipShowCount = numberTipShowCount;
+        updateNumberLlt();
+    }
+
     public void setPerPageCountChoices(int[] perPageCountChoices) {
         this.mPerPageCountChoices = perPageCountChoices;
         initSpinner();
