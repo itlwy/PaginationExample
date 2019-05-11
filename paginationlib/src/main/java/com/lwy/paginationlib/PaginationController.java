@@ -43,6 +43,7 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
     public static int sColor_selected;
     public static int sColor_unselected;
     public static float sTextSize = 16;
+    private TextView mTotalTv;
 
     public void setPerPageCountChoices(int[] perPageCountChoices) {
         this.mPerPageCountChoices = perPageCountChoices;
@@ -77,8 +78,10 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
         mLastBtn = mControllerView.findViewById(R.id.last_btn);
         mNextBtn = mControllerView.findViewById(R.id.next_btn);
         mNumberLlt = mControllerView.findViewById(R.id.number_llt);
+        mTotalTv = mControllerView.findViewById(R.id.total_tv);
         mPerPageCountSpinner = (Spinner) mControllerView.findViewById(R.id.per_page_count_spinner);
 
+        mTotalTv.setTextSize(sTextSize);
         mLastBtn.setText("<");
         mNextBtn.setText(">");
         mLastBtn.setTextSize(sTextSize);
@@ -112,6 +115,7 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
 
     public void setTotalCount(int totalCount) {
         this.mTotalCount = totalCount;
+        mTotalTv.setText("共" + totalCount + "条");
         notifyChange();
     }
 

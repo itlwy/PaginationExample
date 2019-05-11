@@ -11,7 +11,7 @@
     </item>
 
     <item
-        android:left="60dp"
+        android:left="56dp"
         android:right="6dp">
         <bitmap
             android:gravity="end"
