@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +117,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         void onPerPageCountChanged(int perPageCount);
     }
 
-    public static abstract class Adapter<T, VH extends RecyclerView.ViewHolder> {
+    public static abstract class Adapter<T, VH extends ViewHolder> {
         private PaginationRecycleView mPaginationRecycleView;
         private Map<Integer, List<T>> mDataMap;
         private List<T> mShowList;
@@ -127,6 +126,19 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         private int mDataTotal;
         private InnerAdapter mInnerAdapter;
         private int mLastPagePos;
+        private OnItemClickListener mOnItemClickListener;
+
+        public List<T> getDataByPage(int pagePos) {
+            return mDataMap.get(pagePos);
+        }
+
+        public int getCurrentPagePos() {
+            return mCurrentPagePos;
+        }
+
+        public int getPerPageCount() {
+            return mPerPageCount;
+        }
 
         public Adapter(int dataTotalCount) {
             mInnerAdapter = new InnerAdapter();
@@ -148,6 +160,15 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         public void setDatas(int pagePos, List<T> datas) {
             mDataMap.put(pagePos, datas);
             notifyDataSetChanged();
+        }
+
+        public void clear() {
+            mDataMap.clear();
+            notifyDataSetChanged();
+        }
+
+        public T getCurrentPageItem(int position) {
+            return mShowList != null ? mShowList.get(position) : null;
         }
 
         public void nextSkip(int nextPost, int lastPos) {
@@ -180,6 +201,12 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
             bindViewHolder(viewholder, mShowList.get(position));
         }
 
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            VH holder = createViewHolder(parent, viewType);
+            setListener(parent, holder, viewType);
+            return holder;
+        }
+
         public int getItemViewType(int position) {
             return 0;
         }
@@ -188,21 +215,59 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
             return mShowList == null ? 0 : mShowList.size();
         }
 
-        public abstract VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
+        protected void setListener(final ViewGroup parent, final ViewHolder viewHolder, int viewType) {
+            if (!isEnabled(viewType)) return;
+            viewHolder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        int position = viewHolder.getAdapterPosition();
+                        mOnItemClickListener.onItemClick(v, viewHolder, position);
+                    }
+                }
+            });
+
+            viewHolder.getConvertView().setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        int position = viewHolder.getAdapterPosition();
+                        return mOnItemClickListener.onItemLongClick(v, viewHolder, position);
+                    }
+                    return false;
+                }
+            });
+        }
+
+        protected boolean isEnabled(int viewType) {
+            return true;
+        }
 
         public abstract void bindViewHolder(VH viewholder, T data);
+
+        public abstract VH createViewHolder(@NonNull ViewGroup parent, int viewTypea);
 
         /**
          * 每页多少条选项被改变时触发
          *
          * @param perPageCount
          */
-        public void onPerPageCountChanged(int perPageCount) {
+        void onPerPageCountChanged(int perPageCount) {
             mCurrentPagePos = 1;
             mLastPagePos = 0;
             mPerPageCount = perPageCount;
             mDataMap.clear();
             notifyDataSetChanged();
+        }
+
+        public interface OnItemClickListener {
+            void onItemClick(View view, RecyclerView.ViewHolder holder, int position);
+
+            boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position);
+        }
+
+        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+            this.mOnItemClickListener = onItemClickListener;
         }
 
         class InnerAdapter extends RecyclerView.Adapter<VH> {

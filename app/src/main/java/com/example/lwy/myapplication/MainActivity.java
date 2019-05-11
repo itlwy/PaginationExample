@@ -6,13 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lwy.paginationlib.PaginationRecycleView;
+import com.lwy.paginationlib.ViewHolder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PaginationRecycleView.Adapter.OnItemClickListener {
 
 
     private PaginationRecycleView mPaginationRcv;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        mAdapter.setOnItemClickListener(this);
 
     }
 
@@ -73,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
         return datas;
     }
 
+    @Override
+    public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+        JSONObject item = mAdapter.getCurrentPageItem(position);
+        Toast.makeText(this, item.optString("name"), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+        return false;
+    }
+
     class CustomAdapter extends PaginationRecycleView.Adapter<JSONObject, ViewHolder> {
 
 
@@ -83,31 +93,15 @@ public class MainActivity extends AppCompatActivity {
             mContext = context;
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_list, parent,
-                    false);
-            return new ViewHolder(itemView);
-        }
 
         @Override
         public void bindViewHolder(ViewHolder viewholder, JSONObject data) {
-            viewholder.bindDatas(data);
-        }
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mTextView;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mTextView = itemView.findViewById(R.id.text);
+            viewholder.setText(R.id.text, data.optString("name"));
         }
 
-        public void bindDatas(JSONObject jsonObject) {
-            mTextView.setText(jsonObject.optString("name"));
+        @Override
+        public ViewHolder createViewHolder(@NonNull ViewGroup parent, int viewTypea) {
+            return ViewHolder.createViewHolder(mContext, parent, R.layout.item_list);
         }
     }
 
