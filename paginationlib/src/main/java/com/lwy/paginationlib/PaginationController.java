@@ -124,22 +124,25 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
         mCurrentPagePos = 1;
         mLastPagePos = 0;
         if (mTotalCount == 0) {
-            mLastBtn.setSelected(false);
+            mTotalPageCount = 0;
+            mLastBtn.setEnabled(false);
             mLastBtn.setTextColor(sColor_unselected);
-            mNextBtn.setSelected(false);
+            mNextBtn.setEnabled(false);
             mNextBtn.setTextColor(sColor_unselected);
             return;
-        }
-        mLastBtn.setSelected(false);
-        mLastBtn.setTextColor(sColor_unselected);
-        mNextBtn.setSelected(true);
-        mNextBtn.setTextColor(sColor_selected);
+        } else {
+            mLastBtn.setEnabled(false);
+            mLastBtn.setTextColor(sColor_unselected);
+            mNextBtn.setEnabled(true);
+            mNextBtn.setTextColor(sColor_selected);
 
-        mTotalPageCount = mTotalCount % mPerPageCount > 0 ? mTotalCount / mPerPageCount + 1 : mTotalCount / mPerPageCount;
-        if (mListener != null) {
-            mListener.onPerPageCountChanged(mPerPageCount);
-            mListener.onPageSelectedChanged(mCurrentPagePos, mLastPagePos, mTotalPageCount, mTotalCount);
+            mTotalPageCount = mTotalCount % mPerPageCount > 0 ? mTotalCount / mPerPageCount + 1 : mTotalCount / mPerPageCount;
+            if (mListener != null) {
+                mListener.onPerPageCountChanged(mPerPageCount);
+                mListener.onPageSelectedChanged(mCurrentPagePos, mLastPagePos, mTotalPageCount, mTotalCount);
+            }
         }
+
     }
 
     public void next() {
@@ -160,17 +163,17 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
 
     private void updateState(int lastPos) {
         if (mCurrentPagePos == mTotalPageCount) {
-            mNextBtn.setSelected(false);
+            mNextBtn.setEnabled(false);
             mNextBtn.setTextColor(sColor_unselected);
         } else {
-            mNextBtn.setSelected(true);
+            mNextBtn.setEnabled(true);
             mNextBtn.setTextColor(sColor_selected);
         }
         if (mCurrentPagePos == 1) {
-            mLastBtn.setSelected(false);
+            mLastBtn.setEnabled(false);
             mLastBtn.setTextColor(sColor_unselected);
         } else {
-            mLastBtn.setSelected(true);
+            mLastBtn.setEnabled(true);
             mLastBtn.setTextColor(sColor_selected);
         }
 
@@ -233,7 +236,7 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
         }
         for (int i = 0; i < mNumberTipTextViewArray.length; i++) {
             TextView textView = new TextView(getContext());
-            textView.setBackgroundResource(R.drawable.selector_rect);
+            textView.setBackgroundResource(R.drawable.selector_selected_rect);
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(sTextSize);

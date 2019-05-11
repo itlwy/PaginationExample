@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="1dp"
-        android:background="@drawable/selector_rect"
+        android:background="@drawable/selector_enable_rect"
         android:gravity="center" />
 
 
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="1dp"
-        android:background="@drawable/selector_rect"
+        android:background="@drawable/selector_enable_rect"
         android:gravity="center" />
 
     <Spinner
