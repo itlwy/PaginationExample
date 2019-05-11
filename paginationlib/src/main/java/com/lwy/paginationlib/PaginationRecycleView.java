@@ -55,8 +55,8 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         mRecycleView.setAdapter(mAdapter.getmInnerAdapter());
         mAdapter.mPaginationRecycleView = this;
 
-        setTotal(mAdapter.mDataTotal);
         mPaginationControllerView.setmListener(this);
+        setTotal(mAdapter.mDataTotal);
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
@@ -82,6 +82,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         }
         setLoading(false);
     }
+
 
     private void setLoading(boolean flag) {
         if (flag) {
@@ -155,6 +156,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
             mDataTotal = total;
             if (mPaginationRecycleView != null)
                 mPaginationRecycleView.setTotal(total);
+            clear();
         }
 
         public void setDatas(int pagePos, List<T> datas) {
@@ -176,7 +178,9 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
             mLastPagePos = lastPos;
             if (checkIfNeedLoadMore()) {
                 mPaginationRecycleView.setLoading(true);
-                mPaginationRecycleView.mListener.loadMore(mCurrentPagePos - 1, mCurrentPagePos, mPerPageCount, mDataTotal);
+                if (mPaginationRecycleView.mListener != null) {
+                    mPaginationRecycleView.mListener.loadMore(mCurrentPagePos - 1, mCurrentPagePos, mPerPageCount, mDataTotal);
+                }
             } else {
                 notifyDataSetChanged();
             }

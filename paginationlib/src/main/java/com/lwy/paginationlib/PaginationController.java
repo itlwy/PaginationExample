@@ -136,8 +136,10 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
         mNextBtn.setTextColor(sColor_selected);
 
         mTotalPageCount = mTotalCount % mPerPageCount > 0 ? mTotalCount / mPerPageCount + 1 : mTotalCount / mPerPageCount;
-        if (mListener != null)
+        if (mListener != null) {
+            mListener.onPerPageCountChanged(mPerPageCount);
             mListener.onPageSelectedChanged(mCurrentPagePos, mLastPagePos, mTotalPageCount, mTotalCount);
+        }
     }
 
     public void next() {
