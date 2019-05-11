@@ -185,6 +185,7 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
 
     private void updateNumberLlt() {
         if (mTotalCount == 0) {
+            mNumberLlt.removeAllViews();
             return;
         }
         geneNumberTextView();
