@@ -3,16 +3,18 @@
 
     <item>
         <shape>
-            <corners android:radius="6dp" />
+            <corners android:radius="6dp"/>
             <stroke
                 android:width="1dp"
-                android:color="@color/indicator_rect_selected" />
+                android:color="@color/indicator_rect_selected"/>
         </shape>
     </item>
 
-    <item android:left="60dp" >
+    <item
+        android:left="60dp"
+        android:right="6dp">
         <bitmap
             android:gravity="end"
-            android:src="@drawable/arrow_down" />
+            android:src="@drawable/arrow_down"/>
     </item>
 </layer-list>
