@@ -43,7 +43,7 @@ Add the dependency
 
 ```
 dependencies {
-	         implementation 'com.github.itlwy:PaginationExample:0.0.16'
+	         implementation 'com.github.itlwy:PaginationExample:0.0.17'
 	}
 
 ```
