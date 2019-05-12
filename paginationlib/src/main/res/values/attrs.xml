@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PaginationIndicator">
+        <attr name="number_tip_count" format="integer"/>
+        <attr name="selected_color" format="color"/>
+        <attr name="unselected_color" format="color"/>
+        <attr name="text_size" format="dimension"/>
+        <attr name="rect_size" format="dimension"/>
+
+    </declare-styleable>
+    <declare-styleable name="PaginationRecycleView" parent="PaginationIndicator">
+
+    </declare-styleable>
+</resources>

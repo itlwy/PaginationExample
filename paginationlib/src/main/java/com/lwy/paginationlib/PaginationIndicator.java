@@ -1,7 +1,12 @@
 package com.lwy.paginationlib;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PaginationController extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class PaginationIndicator extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private LinearLayout mControllerView;
     private TextView mLastBtn;
     private TextView mNextBtn;
@@ -34,17 +38,22 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
     private int mTotalPageCount;
     private int mTotalCount;
     private int mPerPageCount = 10;
-    private int mNumberTipShowCount = 5;  // 设为奇数: 数字指示器的数量
+    private int mNumberTipShowCount = 5;  // 奇数: 数字指示器的数量
 
     private LinearLayout mNumberLlt;
     private TextView[] mNumberTipTextViewArray;
 
-    private int mWidth;
-    public static int sColor_selected;
-    public static int sColor_unselected;
-    public static float sTextSize = 16;
+    static int sWidth;
+    static int sColor_selected;
+    static int sColor_unselected;
+    static float sTextSize;
     private TextView mTotalTv;
+    private GradientDrawable mDrawableSelected;
+    private GradientDrawable mDrawableUnselected;
 
+    /**
+     * @param numberTipShowCount
+     */
     public void setNumberTipShowCount(int numberTipShowCount) {
         mNumberTipShowCount = numberTipShowCount;
         updateNumberLlt();
@@ -59,53 +68,84 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
         this.mListener = mListener;
     }
 
-    public PaginationController(Context context) {
-        super(context);
-        init();
+    public PaginationIndicator(Context context) {
+        this(context, null);
     }
 
-    public PaginationController(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+    public PaginationIndicator(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public PaginationController(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PaginationIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaginationIndicator);
+        sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.indicator_rect_selected));
+        sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.indicator_rect_unselected));
+        mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 5);
+        sTextSize = a.getDimensionPixelSize(R.styleable.PaginationIndicator_text_size, sp2px(getContext(), 16));
+        sWidth = a.getDimensionPixelSize(R.styleable.PaginationIndicator_rect_size, 0);
+
+        if (sWidth == 0) {
+            sWidth = dp2px(getContext(), 32);
+        }
+        a.recycle();
+
         init();
     }
 
     private void init() {
-        mWidth = dp2px(getContext(), 32);
-        sColor_selected = getContext().getResources().getColor(R.color.indicator_rect_selected);
-        sColor_unselected = getContext().getResources().getColor(R.color.indicator_rect_unselected);
-
         mControllerView = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator, null);
         mLastBtn = mControllerView.findViewById(R.id.last_btn);
         mNextBtn = mControllerView.findViewById(R.id.next_btn);
         mNumberLlt = mControllerView.findViewById(R.id.number_llt);
         mTotalTv = mControllerView.findViewById(R.id.total_tv);
-        mPerPageCountSpinner = (Spinner) mControllerView.findViewById(R.id.per_page_count_spinner);
+        mPerPageCountSpinner = mControllerView.findViewById(R.id.per_page_count_spinner);
 
-        mTotalTv.setTextSize(sTextSize);
-        mLastBtn.setText("<");
-        mNextBtn.setText(">");
-        mLastBtn.setTextSize(sTextSize);
-        mNextBtn.setTextSize(sTextSize);
-        mLastBtn.getLayoutParams().width = mWidth;
-        mLastBtn.getLayoutParams().height = mWidth;
-        mNextBtn.getLayoutParams().width = mWidth;
-        mNextBtn.getLayoutParams().height = mWidth;
-        initSpinner();
         mLastBtn.setOnClickListener(this);
         mNextBtn.setOnClickListener(this);
 
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         addView(mControllerView, layoutParams);
+
+        refreshView();
+    }
+
+    void refreshView() {
+        LayerDrawable spinnerDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.bg_spinner);
+        GradientDrawable drawable = (GradientDrawable) spinnerDrawable.findDrawableByLayerId(R.id.layer1);
+        drawable.setStroke(2, sColor_selected);
+
+        mDrawableSelected = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_selected);
+        mDrawableSelected.setStroke(2, sColor_selected);
+        mDrawableUnselected = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_unselected);
+        mDrawableUnselected.setStroke(2, sColor_unselected);
+
+        StateListDrawable enableSelectorDrawable1 = new StateListDrawable();
+        StateListDrawable enableSelectorDrawable2 = new StateListDrawable();
+        enableSelectorDrawable1.addState(new int[]{android.R.attr.state_enabled}, mDrawableSelected);
+        enableSelectorDrawable1.addState(new int[]{-android.R.attr.state_enabled}, mDrawableUnselected);
+        enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, mDrawableSelected);
+        enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, mDrawableUnselected);
+
+        mPerPageCountSpinner.setBackground(spinnerDrawable);
+        mTotalTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+        mLastBtn.setText("<");
+        mNextBtn.setText(">");
+        mLastBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+        mNextBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+        mLastBtn.getLayoutParams().width = sWidth;
+        mLastBtn.getLayoutParams().height = sWidth;
+        mNextBtn.getLayoutParams().width = sWidth;
+        mNextBtn.getLayoutParams().height = sWidth;
+
+        mLastBtn.setBackground(enableSelectorDrawable1);
+        mNextBtn.setBackground(enableSelectorDrawable2);
+
     }
 
     private void initSpinner() {
         if (mPerPageCountAdapter == null) {
-            mPerPageCountSpinner.getLayoutParams().height = mWidth;
+            mPerPageCountSpinner.getLayoutParams().height = sWidth;
             mPerPageCountAdapter = new CustomArrayAdapter(getContext());
             mPerPageCountSpinner.setAdapter(mPerPageCountAdapter);
             mPerPageCountSpinner.setOnItemSelectedListener(this);
@@ -140,12 +180,17 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
             mNextBtn.setTextColor(sColor_unselected);
             return;
         } else {
+            mTotalPageCount = mTotalCount % mPerPageCount > 0 ? mTotalCount / mPerPageCount + 1 : mTotalCount / mPerPageCount;
             mLastBtn.setEnabled(false);
             mLastBtn.setTextColor(sColor_unselected);
-            mNextBtn.setEnabled(true);
-            mNextBtn.setTextColor(sColor_selected);
+            if (mTotalPageCount == 1) {
+                mNextBtn.setEnabled(false);
+                mNextBtn.setTextColor(sColor_unselected);
+            } else {
+                mNextBtn.setEnabled(true);
+                mNextBtn.setTextColor(sColor_selected);
+            }
 
-            mTotalPageCount = mTotalCount % mPerPageCount > 0 ? mTotalCount / mPerPageCount + 1 : mTotalCount / mPerPageCount;
             if (mListener != null) {
                 mListener.onPerPageCountChanged(mPerPageCount);
                 mListener.onPageSelectedChanged(mCurrentPagePos, mLastPagePos, mTotalPageCount, mTotalCount);
@@ -246,11 +291,14 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
         }
         for (int i = 0; i < mNumberTipTextViewArray.length; i++) {
             TextView textView = new TextView(getContext());
-            textView.setBackgroundResource(R.drawable.selector_selected_rect);
+            StateListDrawable selectSelectorDrawable = new StateListDrawable();
+            selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
+            selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
+            textView.setBackground(selectSelectorDrawable);
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(sTextSize);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mWidth, mWidth);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sWidth, sWidth);
             if (i > 0 && i < mNumberTipTextViewArray.length)
                 params.leftMargin = 2;
             textView.setOnClickListener(this);
@@ -356,7 +404,7 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
             //此处text1是Spinner默认的用来显示文字的TextView
             TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setText(mStringArray.get(position));
-            tv.setTextSize(sTextSize);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
             tv.setTextColor(sColor_selected);
 
             return convertView;
@@ -374,7 +422,7 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
             //此处text1是Spinner默认的用来显示文字的TextView
             TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setText(mStringArray.get(position));
-            tv.setTextSize(sTextSize);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
             tv.setTextColor(sColor_selected);
             return convertView;
         }
@@ -395,5 +443,15 @@ public class PaginationController extends FrameLayout implements View.OnClickLis
     public static int px2dp(Context context, float pxValue) {
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 将sp值转换为px值，保证文字大小不变
+     *
+     * @return
+     */
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
     }
 }

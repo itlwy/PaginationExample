@@ -2,9 +2,11 @@ package com.example.lwy.myapplication;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,23 +28,47 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
     private CustomAdapter mAdapter;
     private int[] perPageCountChoices = {10, 20, 30, 50};
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            List<JSONObject> data = (List<JSONObject>) msg.obj;
+            mAdapter.setDatas(msg.arg1, data);
+            mPaginationRcv.setState(PaginationRecycleView.SUCCESS);
+        }
+    };
+    private int mPerPageCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mPaginationRcv = findViewById(R.id.pagination_rcv);
+
         mAdapter = new CustomAdapter(this, 99);
         mPaginationRcv.setAdapter(mAdapter);
         mPaginationRcv.setPerPageCountChoices(perPageCountChoices);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         mPaginationRcv.setLayoutManager(layoutManager);
-
-        mPaginationRcv.setmListener(new PaginationRecycleView.Listener() {
+        mPaginationRcv.setListener(new PaginationRecycleView.Listener() {
             @Override
             public void loadMore(int currentPagePosition, int nextPagePosition, int perPageCount, int dataTotalCount) {
-                mAdapter.setDatas(nextPagePosition, geneDatas(nextPagePosition, perPageCount));
-                mPaginationRcv.setState(PaginationRecycleView.SUCCESS);
+                final int loadPos = nextPagePosition;
+                mPerPageCount = perPageCount;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(3000);
+                            Message msg = Message.obtain();
+                            msg.obj = geneDatas(loadPos, mPerPageCount);
+                            msg.arg1 = loadPos;
+                            mHandler.sendMessage(msg);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
 
             @Override
@@ -61,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
             for (int i = 0; i < perPageCount; i++) {
                 JSONObject json = new JSONObject();
 
-                json.put("name", "name<" + (from++) + ">");
+                json.put("name", "测试<" + (from++) + ">");
 
                 datas.add(json);
             }

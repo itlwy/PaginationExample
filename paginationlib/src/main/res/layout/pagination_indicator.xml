@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"
-        android:background="@drawable/selector_enable_rect"
         android:gravity="center"/>
 
 
@@ -37,7 +36,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="1dp"
-        android:background="@drawable/selector_enable_rect"
         android:gravity="center"/>
 
     <Spinner
@@ -45,7 +43,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dp"
-        android:background="@drawable/bg_spinner"
         />
 
 </LinearLayout>

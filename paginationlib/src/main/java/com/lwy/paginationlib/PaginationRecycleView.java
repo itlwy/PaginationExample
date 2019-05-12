@@ -1,6 +1,7 @@
 package com.lwy.paginationlib;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -13,41 +14,62 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PaginationRecycleView extends LinearLayout implements PaginationController.OnChangedListener {
+import static com.lwy.paginationlib.PaginationIndicator.dp2px;
+import static com.lwy.paginationlib.PaginationIndicator.sp2px;
+
+public class PaginationRecycleView extends LinearLayout implements PaginationIndicator.OnChangedListener {
 
     public static final int SUCCESS = 0;
     public static final int FAILED = 1;
     public static final int EMPTY = 2;
     private RecyclerView mRecycleView;
-    private PaginationController mPaginationControllerView;
+    private PaginationIndicator mPaginationIndicatorView;
     private Adapter mAdapter;
     private Listener mListener;
     private ProgressBar mProgressBar;
 
-    public void setmListener(Listener mListener) {
-        this.mListener = mListener;
+    public void setListener(Listener listener) {
+        this.mListener = listener;
     }
 
     public PaginationRecycleView(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public PaginationRecycleView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public PaginationRecycleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs, defStyleAttr);
     }
 
-    private void init() {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaginationIndicator);
+        int color_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.indicator_rect_selected));
+        int color_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.indicator_rect_unselected));
+        int numberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 0);
+        int textSize = a.getDimensionPixelSize(R.styleable.PaginationIndicator_text_size, sp2px(getContext(), 16));
+        int width = a.getDimensionPixelSize(R.styleable.PaginationIndicator_rect_size, 0);
+
+        if (width == 0) {
+            width = dp2px(getContext(), 32);
+        }
+        a.recycle();
+
         View.inflate(getContext(), R.layout.pagination_layout, this);
         mRecycleView = findViewById(R.id.rcv);
-        mPaginationControllerView = findViewById(R.id.controller);
+        mPaginationIndicatorView = findViewById(R.id.indicator);
         mProgressBar = findViewById(R.id.progress);
+
+        if (numberTipShowCount != 0)
+            mPaginationIndicatorView.setNumberTipShowCount(numberTipShowCount);
+        PaginationIndicator.sTextSize = textSize;
+        PaginationIndicator.sColor_selected = color_selected;
+        PaginationIndicator.sColor_unselected = color_unselected;
+        PaginationIndicator.sWidth = width;
+        mPaginationIndicatorView.refreshView();
     }
 
     public void setAdapter(Adapter adapter) {
@@ -55,7 +77,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
         mRecycleView.setAdapter(mAdapter.getmInnerAdapter());
         mAdapter.mPaginationRecycleView = this;
 
-        mPaginationControllerView.setmListener(this);
+        mPaginationIndicatorView.setmListener(this);
         setTotal(mAdapter.mDataTotal);
     }
 
@@ -64,7 +86,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
     }
 
     public void setPerPageCountChoices(int[] perPageCountChoices) {
-        mPaginationControllerView.setPerPageCountChoices(perPageCountChoices);
+        mPaginationIndicatorView.setPerPageCountChoices(perPageCountChoices);
     }
 
     public void setState(int flag) {
@@ -75,7 +97,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
             case EMPTY:
             case FAILED:
                 if (mAdapter.mLastPagePos > 0) {
-                    mPaginationControllerView.skip2Pos(mAdapter.mLastPagePos);
+                    mPaginationIndicatorView.skip2Pos(mAdapter.mLastPagePos);
                     mAdapter.mCurrentPagePos = mAdapter.mLastPagePos;
                 }
                 break;
@@ -93,11 +115,11 @@ public class PaginationRecycleView extends LinearLayout implements PaginationCon
     }
 
     private void setTotal(int total) {
-        mPaginationControllerView.setTotalCount(total);
+        mPaginationIndicatorView.setTotalCount(total);
     }
 
     public void setNumberTipShowCount(int numberTipShowCount) {
-        mPaginationControllerView.setNumberTipShowCount(numberTipShowCount);
+        mPaginationIndicatorView.setNumberTipShowCount(numberTipShowCount);
     }
 
     @Override
