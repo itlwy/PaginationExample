@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(800);
                             Message msg = Message.obtain();
                             msg.obj = geneDatas(loadPos, mPerPageCount);
                             msg.arg1 = loadPos;

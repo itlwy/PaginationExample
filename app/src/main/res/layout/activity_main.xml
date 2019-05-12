@@ -11,9 +11,9 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         app:number_tip_count="5"
-        app:rect_size="32dp"
+        app:rect_size="30dp"
         app:selected_color="@color/indicator_rect_selected"
-        app:text_size="16sp"
+        app:text_size="14sp"
         app:unselected_color="@color/indicator_rect_unselected"
         />
 
