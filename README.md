@@ -16,8 +16,10 @@
 
 ## 效果图
 
-![示例1](https://github.com/itlwy/PaginationExample/blob/master/resources/pic1.png)
-![示例2](https://github.com/itlwy/PaginationExample/blob/master/resources/pic2.png)
+<img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic1.png"
+        width = "100" height = "100" div align=left/>
+<img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic2.png"
+        width = "100" height = "100" div align=left/>
 
 # Screenshots
 #![Alt text](https://github.com/itlwy/PaginationExample/blob/master/resources/pagination.gif)
