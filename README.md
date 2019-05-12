@@ -16,8 +16,8 @@
 
 ## 效果图
 
-![示例1](https://raw.githubusercontent.com/itlwy/PaginationExample/master/resources/pic1.png)
-![示例2](https://raw.githubusercontent.com/itlwy/PaginationExample/master/resources/pic2.png)
+![示例1](https://github.com/itlwy/PaginationExample/blob/master/resources/pic1.png)
+![示例2](https://github.com/itlwy/PaginationExample/blob/master/resources/pic2.png)
 
 # Screenshots
 #![Alt text](https://github.com/itlwy/PaginationExample/blob/master/resources/pagination.gif)
