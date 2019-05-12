@@ -50,6 +50,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
     private TextView mTotalTv;
     private GradientDrawable mDrawableSelected;
     private GradientDrawable mDrawableUnselected;
+    private LayerDrawable mSpinnerDrawable;
 
     /**
      * @param numberTipShowCount
@@ -112,23 +113,36 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
     }
 
     void refreshView() {
-        LayerDrawable spinnerDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.bg_spinner);
-        GradientDrawable drawable = (GradientDrawable) spinnerDrawable.findDrawableByLayerId(R.id.layer1);
+        if (mSpinnerDrawable == null) {
+            mSpinnerDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.bg_spinner);
+        }
+        GradientDrawable drawable = (GradientDrawable) mSpinnerDrawable.findDrawableByLayerId(R.id.layer1);
         drawable.setStroke(2, sColor_selected);
 
-        mDrawableSelected = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_selected);
+        if (mDrawableSelected == null) {
+            mDrawableSelected = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_selected);
+            mDrawableUnselected = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_unselected);
+        }
         mDrawableSelected.setStroke(2, sColor_selected);
-        mDrawableUnselected = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_unselected);
         mDrawableUnselected.setStroke(2, sColor_unselected);
 
         StateListDrawable enableSelectorDrawable1 = new StateListDrawable();
-        StateListDrawable enableSelectorDrawable2 = new StateListDrawable();
-        enableSelectorDrawable1.addState(new int[]{android.R.attr.state_enabled}, mDrawableSelected);
-        enableSelectorDrawable1.addState(new int[]{-android.R.attr.state_enabled}, mDrawableUnselected);
-        enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, mDrawableSelected);
-        enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, mDrawableUnselected);
+        GradientDrawable drawableSelected1 = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_selected);
+        drawableSelected1.setStroke(2, sColor_selected);
+        GradientDrawable drawableUnselected1 = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_unselected);
+        drawableUnselected1.setStroke(2, sColor_unselected);
+        enableSelectorDrawable1.addState(new int[]{android.R.attr.state_enabled}, drawableSelected1);
+        enableSelectorDrawable1.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected1);
 
-        mPerPageCountSpinner.setBackgroundDrawable(spinnerDrawable);
+        StateListDrawable enableSelectorDrawable2 = new StateListDrawable();
+        GradientDrawable drawableSelected2 = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_selected);
+        drawableSelected2.setStroke(2, sColor_selected);
+        GradientDrawable drawableUnselected2 = (GradientDrawable) getResources().getDrawable(R.drawable.shape_round_rect_unselected);
+        drawableUnselected2.setStroke(2, sColor_unselected);
+        enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, drawableSelected2);
+        enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected2);
+
+        mPerPageCountSpinner.setBackgroundDrawable(mSpinnerDrawable);
         mTotalTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
         mLastBtn.setText("<");
         mNextBtn.setText(">");
