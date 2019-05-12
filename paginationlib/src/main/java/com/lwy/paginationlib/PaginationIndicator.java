@@ -127,7 +127,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, mDrawableSelected);
         enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, mDrawableUnselected);
 
-        mPerPageCountSpinner.setBackground(spinnerDrawable);
+        mPerPageCountSpinner.setBackgroundDrawable(spinnerDrawable);
         mTotalTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
         mLastBtn.setText("<");
         mNextBtn.setText(">");
@@ -138,8 +138,8 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         mNextBtn.getLayoutParams().width = sWidth;
         mNextBtn.getLayoutParams().height = sWidth;
 
-        mLastBtn.setBackground(enableSelectorDrawable1);
-        mNextBtn.setBackground(enableSelectorDrawable2);
+        mLastBtn.setBackgroundDrawable(enableSelectorDrawable1);
+        mNextBtn.setBackgroundDrawable(enableSelectorDrawable2);
 
     }
 
@@ -294,7 +294,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
             StateListDrawable selectSelectorDrawable = new StateListDrawable();
             selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
             selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
-            textView.setBackground(selectSelectorDrawable);
+            textView.setBackgroundDrawable(selectSelectorDrawable);
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
