@@ -103,6 +103,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
 
         mLastBtn.setOnClickListener(this);
         mNextBtn.setOnClickListener(this);
+        initSpinner();
 
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         addView(mControllerView, layoutParams);
@@ -137,6 +138,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         mLastBtn.getLayoutParams().height = sWidth;
         mNextBtn.getLayoutParams().width = sWidth;
         mNextBtn.getLayoutParams().height = sWidth;
+        mPerPageCountSpinner.getLayoutParams().height = sWidth;
 
         mLastBtn.setBackgroundDrawable(enableSelectorDrawable1);
         mNextBtn.setBackgroundDrawable(enableSelectorDrawable2);
@@ -145,7 +147,6 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
 
     private void initSpinner() {
         if (mPerPageCountAdapter == null) {
-            mPerPageCountSpinner.getLayoutParams().height = sWidth;
             mPerPageCountAdapter = new CustomArrayAdapter(getContext());
             mPerPageCountSpinner.setAdapter(mPerPageCountAdapter);
             mPerPageCountSpinner.setOnItemSelectedListener(this);

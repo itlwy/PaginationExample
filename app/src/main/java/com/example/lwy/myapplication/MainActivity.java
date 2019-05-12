@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
 
         mAdapter = new CustomAdapter(this, 99);
         mPaginationRcv.setAdapter(mAdapter);
-        mPaginationRcv.setPerPageCountChoices(perPageCountChoices);
+//        mPaginationRcv.setPerPageCountChoices(perPageCountChoices);
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         mPaginationRcv.setLayoutManager(layoutManager);
