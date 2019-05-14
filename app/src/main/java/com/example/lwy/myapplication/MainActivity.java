@@ -80,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
 
     }
 
+    /**
+     * 产生假数据
+     *
+     * @param currentPagePosition
+     * @param perPageCount
+     * @return
+     */
     public List<JSONObject> geneDatas(int currentPagePosition, int perPageCount) {
         int from = (currentPagePosition - 1) * perPageCount;
         List<JSONObject> datas = new ArrayList<>();
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
 
     @Override
     public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-        JSONObject item = mAdapter.getCurrentPageItem(position);
+        JSONObject item = mAdapter.getCurrentPageItem(position);  // 此处position返回的是recycleview的位置，所以取当前页显示列表的项
         Toast.makeText(this, item.optString("name"), Toast.LENGTH_LONG).show();
     }
 
