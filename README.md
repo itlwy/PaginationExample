@@ -21,6 +21,7 @@
 
 <img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic1.png"
 ​        width = "40%" height = "40%" div align=left/>
+
 <img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic2.png"
 ​        width = "40%" height = "40%" div align=left/>
 
