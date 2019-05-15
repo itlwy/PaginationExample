@@ -1,6 +1,8 @@
 # PaginationExample
 轻量级仿网页风格分页器，和RecycleView封装一起配合使用，也可单独使用，喜欢就star、fork下吧～谢谢
 
+> 博客同步自:[个人博客主页](http://liweiye.top/2019/05/15/Android%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E9%A1%B5%E9%A3%8E%E6%A0%BC%E5%88%86%E9%A1%B5%E5%99%A8/)
+
 ## 目录
 
 * [功能介绍](#功能介绍)
