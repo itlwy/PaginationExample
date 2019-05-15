@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.lwy.paginationlib.PaginationIndicator;
 import com.lwy.paginationlib.PaginationRecycleView;
 import com.lwy.paginationlib.ViewHolder;
 
@@ -24,11 +25,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements PaginationRecycleView.Adapter.OnItemClickListener {
 
 
-    private PaginationRecycleView mPaginationRcv;
+        private PaginationRecycleView mPaginationRcv;
     private CustomAdapter mAdapter;
     private int[] perPageCountChoices = {10, 20, 30, 50};
 
-    private Handler mHandler = new Handler() {
+        private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             List<JSONObject> data = (List<JSONObject>) msg.obj;
@@ -37,11 +38,27 @@ public class MainActivity extends AppCompatActivity implements PaginationRecycle
         }
     };
     private int mPerPageCount;
+//    private PaginationIndicator mIndicatorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        mIndicatorView = (PaginationIndicator) findViewById(R.id.indicator);
+//        mIndicatorView.setTotalCount(99);
+//        mIndicatorView.setPerPageCountChoices(perPageCountChoices);
+//        mIndicatorView.setListener(new PaginationIndicator.OnChangedListener() {
+//            @Override
+//            public void onPageSelectedChanged(int currentPapePos, int lastPagePos, int totalPageCount, int total) {
+//                Toast.makeText(MainActivity.this, "选中" + currentPapePos + "页", Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onPerPageCountChanged(int perPageCount) {
+//
+//            }
+//        });
+
         mPaginationRcv = findViewById(R.id.pagination_rcv);
 
         mAdapter = new CustomAdapter(this, 99);

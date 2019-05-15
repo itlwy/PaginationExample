@@ -53,6 +53,8 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
     private LayerDrawable mSpinnerDrawable;
 
     /**
+     * 设置分页控件中间的数字显示个数
+     *
      * @param numberTipShowCount
      */
     public void setNumberTipShowCount(int numberTipShowCount) {
@@ -60,12 +62,17 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         updateNumberLlt();
     }
 
+    /**
+     * 设置"x条/页"的spinner的选项源
+     *
+     * @param perPageCountChoices
+     */
     public void setPerPageCountChoices(int[] perPageCountChoices) {
         this.mPerPageCountChoices = perPageCountChoices;
         initSpinner();
     }
 
-    public void setmListener(OnChangedListener mListener) {
+    public void setListener(OnChangedListener mListener) {
         this.mListener = mListener;
     }
 
@@ -112,6 +119,9 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         refreshView();
     }
 
+    /**
+     * 刷新分页器子组件相关字体颜色属性等
+     */
     void refreshView() {
         if (mSpinnerDrawable == null) {
             mSpinnerDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.bg_spinner);
@@ -173,11 +183,17 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         mPerPageCountSpinner.setSelection(0);
     }
 
+    /**
+     * 设置数据源总数量
+     *
+     * @param totalCount
+     */
     public void setTotalCount(int totalCount) {
         this.mTotalCount = totalCount;
         mTotalTv.setText("共" + totalCount + "条");
         notifyChange();
     }
+
 
     private void notifyChange() {
         initIndicator();
@@ -214,6 +230,9 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
 
     }
 
+    /**
+     * 下一页
+     */
     public void next() {
         int lastPos = mCurrentPagePos;
         if (mCurrentPagePos == mTotalPageCount)
@@ -222,6 +241,9 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         updateState(lastPos);
     }
 
+    /**
+     * 上一页
+     */
     public void last() {
         int lastPos = mCurrentPagePos;
         if (mCurrentPagePos == 1)
@@ -230,6 +252,11 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         updateState(lastPos);
     }
 
+    /**
+     * 选中页发生变化时调用 更新按钮、数字指示器状态即回调监听器
+     *
+     * @param lastPos
+     */
     private void updateState(int lastPos) {
         if (mCurrentPagePos == mTotalPageCount) {
             mNextBtn.setEnabled(false);
@@ -252,6 +279,9 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         updateNumberLlt();
     }
 
+    /**
+     * 生成数字指示器view及计算需要渲染的数字起始到结束
+     */
     private void updateNumberLlt() {
         if (mTotalCount == 0) {
             mNumberLlt.removeAllViews();
@@ -279,6 +309,12 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         }
     }
 
+    /**
+     * 根据起始数字和结束数字填充数字指示器的textview
+     *
+     * @param start
+     * @param end
+     */
     private void updateNumberText(int start, int end) {
         for (int i = 0; i < end - start + 1; i++) {
             TextView textView = mNumberTipTextViewArray[i];
@@ -292,6 +328,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
             }
         }
     }
+
 
     private void geneNumberTextView() {
         int count = mNumberTipShowCount < mTotalPageCount ? mNumberTipShowCount : mTotalPageCount;
@@ -347,6 +384,14 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
         updateState(lastPos);
     }
 
+    /**
+     * "x条/每页"Spinner选中值改变时触发
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mPerPageCount = mPerPageCountChoices[position];
@@ -361,6 +406,11 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
 
     }
 
+    /**
+     * 跳到指定页码
+     *
+     * @param position
+     */
     public void skip2Pos(int position) {
         mLastPagePos = mCurrentPagePos;
         mCurrentPagePos = position;
@@ -369,8 +419,21 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
 
 
     public interface OnChangedListener {
+        /**
+         * 选中页改变时回调
+         *
+         * @param currentPapePos 当前选中的页码
+         * @param lastPagePos    上一个选中的页码
+         * @param totalPageCount 总页数
+         * @param total          数据源总量
+         */
         void onPageSelectedChanged(int currentPapePos, int lastPagePos, int totalPageCount, int total);
 
+        /**
+         * "x条/页"选中值改变时触发的回调
+         *
+         * @param perPageCount
+         */
         void onPerPageCountChanged(int perPageCount);
     }
 

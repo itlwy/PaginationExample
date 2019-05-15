@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.lwy.paginationlib.PaginationRecycleView
-        android:id="@+id/pagination_rcv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        app:number_tip_count="5"
-        app:rect_size="30dp"
-        app:selected_color="@color/indicator_rect_selected"
-        app:text_size="14sp"
-        app:unselected_color="@color/indicator_rect_unselected"
-        />
+    android:id="@+id/pagination_rcv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="8dp"
+    app:number_tip_count="5"
+    app:rect_size="30dp"
+    app:selected_color="@color/indicator_rect_selected"
+    app:text_size="14sp"
+    app:unselected_color="@color/indicator_rect_unselected"
+    />
 
+    <!--<com.lwy.paginationlib.PaginationIndicator-->
+        <!--android:id="@+id/indicator"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:number_tip_count="5"-->
+        <!--app:rect_size="30dp"-->
+        <!--app:selected_color="@color/indicator_rect_selected"-->
+        <!--app:text_size="14sp"-->
+        <!--app:unselected_color="@color/indicator_rect_unselected"/>-->
 
 </LinearLayout>

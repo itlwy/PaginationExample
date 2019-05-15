@@ -77,7 +77,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationInd
         mRecycleView.setAdapter(mAdapter.getInnerAdapter());
         mAdapter.mPaginationRecycleView = this;
 
-        mPaginationIndicatorView.setmListener(this);
+        mPaginationIndicatorView.setListener(this);
         setTotal(mAdapter.mDataTotal);
     }
 
