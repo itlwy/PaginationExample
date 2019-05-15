@@ -20,9 +20,7 @@
 ## 效果图
 
 <img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic1.png"
- width = "40%" height = "40%" div align=left/>
-
-<img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic2.png"  width = "40%" height = "40%" div align=left/>
+ width = "40%" height = "40%" div align=left/><img src="https://github.com/itlwy/PaginationExample/blob/master/resources/pic2.png"  width = "40%" height = "40%" div align=right/>
 
 ## Screenshots
 #![Alt text](https://github.com/itlwy/PaginationExample/blob/master/resources/pagination.gif)
